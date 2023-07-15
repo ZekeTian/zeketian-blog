@@ -177,6 +177,8 @@ public TemplateModel get(String key) throws TemplateModelException {
 
 
 
+
+
 **省略作用域对象名**
 
 在省略作用域对象名时，使用方式是`${attrName}`，而 Freemarer 在解析这个表达式时，会进入方法 `freemarker.ext.servlet.AllHttpScopesHashModel#get` 。而 `AllHttpScopesHashModel#get` 方法则会去各个作用域对象中尝试获取对应的 attribute 值，具体实现代码如下：
