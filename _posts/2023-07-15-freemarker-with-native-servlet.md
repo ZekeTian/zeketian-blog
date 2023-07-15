@@ -12,8 +12,6 @@ author: ZekeTian
 {:toc}
 
 
-
-
 我们在使用 Freemarker 时，通常会结合 Spring、SpringBoot 等框架使用，很少会在原生的 Servlet 中直接使用。因此，目前很多文章的内容都是讲解如何借助这些框架去使用 Freemarker，很少有文章讲解如何在原生的 Servlet 中使用 Freemarker。为了加深对 Freemarker 使用方式的理解，本文将介绍原生 Servlet 中的 Freemarker 使用，以及可能会遇到的一些坑。
 
 
