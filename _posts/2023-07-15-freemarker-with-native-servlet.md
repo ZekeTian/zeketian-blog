@@ -8,10 +8,6 @@ author: ZekeTian
 
 
 
-
-
-
-
 * content
 {:toc}
 
@@ -21,7 +17,9 @@ author: ZekeTian
 
 
 
-## 配置 Freemarker
+
+
+## 1. 配置 Freemarker
 
 在原生 Servlet 中使用 Freemarker，需要在 web.xml 中添加如下相关的配置：
 
@@ -81,9 +79,9 @@ author: ZekeTian
 
 
 
-## 使用介绍
+## 2. 使用介绍
 
-### ftl 的作用域对象
+### 2.1 ftl 的作用域对象
 
 在 JSP 的 EL 表达式中，其内置了 pageScope、requestScope、sessionScope、applicationScope 四种作用域对象，方便我们获取数据。而在 FreemarkerServet 中，其同样也为我们内置了如下的四种作用域对象：
 
@@ -94,7 +92,7 @@ author: ZekeTian
 
 
 
-#### 基本使用方法
+#### 2.1.1 基本使用方法
 
 在 ftl 文件中，获取作用域对象的数据，有如下两种方式：
 
@@ -117,7 +115,7 @@ author: ZekeTian
 
 
 
-#### 底层实现
+#### 2.1.2 底层实现
 
 在了解完基本用法之后，我们再来看看 Freemare 底层是如何实现这两种数据获取方式。
 
@@ -232,7 +230,7 @@ public TemplateModel get(String key) throws TemplateModelException {
 
 
 
-#### 总结
+#### 2.1.3 总结
 
 在讲解完 ftl 的作用域对象的基本用法和实现代码之后，我们再根据[官方文档](https://freemarker.apache.org/docs/api/freemarker/ext/servlet/FreemarkerServlet.html) 中 FreemarkerServlet 的介绍进行回顾总结：
 
@@ -245,9 +243,9 @@ public TemplateModel get(String key) throws TemplateModelException {
 
 
 
-### 获取 ContextPath
+### 2.2 获取 ContextPath
 
-#### 尝试的方案及可能的错误
+#### 2.2.1 尝试的方案及可能的错误
 
 在开发 html 页面时，通常会使用到 css 等静态文件，而这些静态文件的路径需要获取 contextPath。所以，我们在 ftl 文件中也要想办法获取到 contextPath。
 
@@ -261,7 +259,7 @@ JSP 中的获取方式如下：
 
 如果，你借鉴上面的写法，尝试在 ftl 文件中通过 Request 对象获取 contextPath。也许，你可能会在 ftl 文件中用如下代码获取。
 
-```ftl
+```html
 context path : ${Request.contextPath}
 ```
 
@@ -277,7 +275,7 @@ context path : ${Request.contextPath}
 
 
 
-#### 解决方案
+#### 2.2.2 解决方案
 
 当遇到上面的错误之后，你可能会在网上搜索 “freemarker 如何获取 contextPath”。但是，网上提供的解决方案大多是基于 Spring 框架去实现的，而我们目前的场景是在原生 Servlet 环境中使用 Freemarker。
 
@@ -310,7 +308,7 @@ public class WebContextListener implements ServletContextListener {
 
 当将 contextPath 放进 ServletContext 的 attributes 后，可以在 ftl 文件中通过如下方式获取：
 
-```ftl
+```html
 context path : ${Application.contextPath}
 ```
 
