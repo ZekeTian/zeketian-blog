@@ -209,7 +209,7 @@ Jupyter 默认端口号是 8888，当在命令行中启动多个 Jupyter 时，�
 
 - 输入如下的命令
 
-  ```
+  ```shell
   conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
   
   conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge 

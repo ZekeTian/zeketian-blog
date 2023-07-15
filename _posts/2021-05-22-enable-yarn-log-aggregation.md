@@ -5,16 +5,9 @@ categories: 分布式
 tags: 大数据 Hadoop
 author: ZekeTian
 ---
-
-
-
-
-
 * content
-{:toc}
-本文主要讲解如何开启 Hadoop 中的 Yarn 日志聚合功能，从而在 Web UI 上查看日志信息，便于调试。注意，本文方法的 Hadoop 环境是 **Hadoop 2.7.7**。
-
-
+  {:toc}
+  本文主要讲解如何开启 Hadoop 中的 Yarn 日志聚合功能，从而在 Web UI 上查看日志信息，便于调试。注意，本文方法的 Hadoop 环境是 **Hadoop 2.7.7**。
 
 ## 1. 问题描述
 
@@ -33,7 +26,7 @@ author: ZekeTian
 
 ### 2.1 配置 Hosts 文件
 
-如果是因为 Windows 系统无法识别主机名而不能访问，需要在 **hosts** 文件中添加 Linux 的主机名。进入`C:\Windows\System32\drivers\etc` 路径，打开 **hosts** 文件，添加如下信息：
+如果是因为 Windows 系统无法识别主机名而不能访问，需要在 **hosts** 文件中添加 Linux 的主机名。进入 `C:\Windows\System32\drivers\etc` 路径，打开 **hosts** 文件，添加如下信息：
 
 ```
 linux机器ip             linux主机名
