@@ -7,7 +7,7 @@
 
 # Site settings
 title: ZekeTian
-brief-intro: A student major in Computer Science
+brief-intro: A developer who loves Computer Science
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://www.zeketian.com/" # the base hostname & protocol for your site
 
