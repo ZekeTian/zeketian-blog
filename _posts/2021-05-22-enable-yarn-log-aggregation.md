@@ -5,9 +5,16 @@ categories: 分布式
 tags: 大数据 Hadoop
 author: ZekeTian
 ---
+
+
+
 * content
-  {:toc}
+{:toc}
+
+
   本文主要讲解如何开启 Hadoop 中的 Yarn 日志聚合功能，从而在 Web UI 上查看日志信息，便于调试。注意，本文方法的 Hadoop 环境是 **Hadoop 2.7.7**。
+
+
 
 ## 1. 问题描述
 

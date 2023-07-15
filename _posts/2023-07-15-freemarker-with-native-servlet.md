@@ -21,8 +21,6 @@ author: ZekeTian
 
 
 
-
-
 ## 配置 Freemarker
 
 在原生 Servlet 中使用 Freemarker，需要在 web.xml 中添加如下相关的配置：
