@@ -36,6 +36,7 @@ pre {
         padding: 0;
         border: none;
         background-color: transparent; /* 多行代码时，清除单行代码的背景 */
+        // 下面的样式是为了在显示行号时使用
         table {
             background-color: transparent;
             border: none;
