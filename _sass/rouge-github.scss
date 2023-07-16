@@ -11,17 +11,16 @@ pre {
     > code {
         margin: 0;
         padding: 0;
-        font-size: 13px;
         color:#222;
         border: none;
-        background-color: #fff
+        background-color: transparent; /* 多行代码时，清除单行代码的背景 */
     }
 }
 
 .highlight {
-    border-radius: 3px;
+    border-radius: 5px;
 
-    background: #ffffcc;
+    background: #f6f8fa;
     .hll { background-color: #ffffcc }
     .c { color: #999988; font-style: italic } /* Comment */
     .err { color: #a61717; background-color: #e3d2d2 } /* Error */
