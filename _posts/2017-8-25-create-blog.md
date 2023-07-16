@@ -10,7 +10,7 @@ author: ZekeTian
 {:toc}
 
 
-经过两天的折腾，终于利用Jekyll成功搭建了自己的个人博客。现在来记录下自己搭建博客的过程，既是个人的一个总结，也希望对想要搭建个人博客的朋友提供一些帮助。
+经过两天的折腾，终于利用Jekyll成功搭建了自己的个人博客。现在来记录下自己搭建博客的过程，既是笔者的一个总结，也希望对想要搭建个人博客的朋友提供一些帮助。
 
 
 
@@ -26,11 +26,15 @@ GitHub 与 Coding的比较：
 
 （2）个性域名：两者均支持用户自定义的个性域名
 
-（3）SSL证书：GitHub原生的博客网址支持SSL证书，若用户自定义域名					之后，SLL证书失效（可通过第三方添加SSL证书）。相比，Coding自定义的域名支持SSL证书。
+（3）SSL证书：GitHub原生的博客网址支持SSL证书~~，若用户自定义域名之后，SLL证书失效（可通过第三方添加SSL证书）~~。相比，Coding自定义的域名支持SSL证书。
 
 （4）跳转广告：GitHub无跳转广告，Coding在用户自定义域名之后，访问博客之前会显示几秒钟的Coding Pages跳转页，用户若想去掉该跳转页，需要网站上添加“Hosted by Coding Pages”说明
 
 在选定之后，只需要先注册一个用户即可。
+
+注：由于 Coding 的 page 服务需要搭配腾讯云一起使用，故不再推荐优先使用 Coding（更新于 2022 年）。
+
+
 
 ### 2、注册个性域名（此步也可省略）
 
@@ -118,8 +122,6 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://www.zeketian.top/" # 博客网址
 ```
 
-
-
 （2）修改底部链接信息
 
 ```
@@ -163,7 +165,51 @@ google_analytics_id:  # google 统计的 id
 * 进入个人网站，点击 “管理” ==》 “获取代码” ![](http://ov8clk5cn.bkt.clouddn.com/17-8-25/77349227.jpg)
 * 在统计代码获取中找到` hm.src = "https://hm.baidu.com/hm.js?XXXXXXXXX"` ，复制其中的XXXXXXXXX并粘贴到 baidu_tongji_id : 处
 
-### 3、清除原作者的相关信息
+
+
+### 3、添加代码高亮样式
+
+在主题中，原来的代码高亮样式是黑色系，笔者觉得该样式不太适合博客主题。因此，笔者尝试去新增一个白色系的代码高亮样式。经过查看此博客主题的代码、 Jekyll 官方文档，确定只需要更改主题下 `_sass/_syntax-highlighting.scss` 中的 CSS 样式即可修改代码高亮样式。
+
+在确定了修改方法之后，我们还需要一个白色系的代码高亮 CSS 样式。所幸，Jekyll 官方文档在介绍 [Code snippet highlighting](https://jekyllrb.com/docs/liquid/tags/#code-snippet-highlighting) 时，提到了相关的 CSS 资源仓库 [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes)。jekyll-pygments-themes 仓库中提供了很多的样式，笔者选择了 github 主题样式。
+
+为了既保留原有的代码高亮样式，又新增 github 代码样式，笔者在 `_sass/` 目录下创建了如下两个文件：
+
+-  `rouge-monokai.scss`：将原来 `_syntax-highlighting.scss`中的 CSS 样式移到该文件中（只需要移动多行代码的高亮样式即可）
+
+- `rouge-github.scss`：存放 github 主题的 CSS 样式
+
+在完成上述两个文件的内容改造之后，在 `_syntax-highlighting.scss` 中引入相应的 CSS 即可。
+
+`_syntax-highlighting.scss` 文件的内容如下所示：
+
+```scss
+// 引入 github 样式，如果想切换到原来的黑色系样式，将代码更改为 @import "rouge-monokai"; 即可
+@import "rouge-github";
+
+// 单行代码样式
+code{
+    padding: 1px 4px;
+    margin: 0 2px;
+    font-size: 90%;
+    border-radius: 3px;
+    color: #000;
+    background-color: rgba(0, 0, 0, 0.06);
+    border: 1px solid #c4c4c4;
+    font-family: Monaco,Menlo,"Microsoft YaHei Mono",Consolas,"Courier New",monospace,sans-serif;
+}
+```
+
+在 `_syntax-highlighting.scss` 文件中只存放公共的代码高亮样式（单行代码高亮），而多行代码的高亮样式放在 `rouge-monokai.scss` 和 `rouge-github.scss` 中，然后通过 import 自由切换样式。
+
+上述涉及的三个 SCSS 文件，详细内容可见笔者的[博客仓库](https://github.com/ZekeTian/zeketian-blog)。另外，笔者再附上一些代码高亮 CSS 样式的资源仓库：
+
+- [jekyll-gitbook](https://github.com/sighingnow/jekyll-gitbook)：该仓库也是一个博客主题仓库，在 [/assets/gitbook/rouge](/assets/gitbook/rouge) 中提供了多个 CSS 样式文件
+- [pygments-css](https://github.com/richleland/pygments-css)：该仓库提供了 pygments 的 CSS 样式文件（可用于 rouge），而 [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes) 正是 fork 自该仓库
+
+
+
+### 4、清除原作者的相关信息
 
 （1）替换网站图标
 
@@ -179,7 +225,7 @@ google_analytics_id:  # google 统计的 id
 
 原 Demo 界面展示是作者的项目，若不想要此界面， 可将 `page` 目录里面的 `3demo.html` 文件删除。如果要修改里面的内容，则要到 `js` 目录下修改 js 文件
 
-### 4、开始写博客
+### 5、开始写博客
 
 在 `_posts` 目录下新建 `.md` 文件，遵循 Markdown 语法写个人博客即可（文件名建议以时间的形式命名，即 yyyy-mm-dd-filename 形式，这样会自动生成时间）。
 
@@ -227,7 +273,7 @@ excerpt_separator: "\n\n\n\n"
 
 详细配置信息可参考 [HyG](https://github.com/Gaohaoyang/gaohaoyang.github.io) 的博客
 
-### 5、运行
+### 6、运行
 
 打开命令行工具，路径切换到 Blog 目录下， 运行 `jekyll s` ，若正常运行则会看到 `Server running... press ctrl-c to stop.`。
 
