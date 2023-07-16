@@ -19,8 +19,11 @@ pre {
             border: none;
             margin: 0px;
             border-collapse: unset;
-            > tr {
+            .tr {
                 background-color: transparent;
+            }
+            .td {
+                padding: 0;
             }
         }
         .lineno {
