@@ -120,7 +120,7 @@ author: ZekeTian
 
 在不省略作用域对象名时，使用方式是`${作用域对象.属性名}`，Freemarer 在解析这个表达式时，会进入方法 `freemarker.core.Dot#_eval` 去获取作用域对象以及对应的属性值。 `freemarker.core.Dot#_eval`的代码如下：
 
-{% highlight ruby linenos %}
+{% highlight java linenos  mark_lines="2 4" %}
 TemplateModel _eval(Environment env) throws TemplateException {
     TemplateModel leftModel = target.eval(env);
     if (leftModel instanceof TemplateHashModel) {
