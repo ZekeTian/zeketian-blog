@@ -5,7 +5,7 @@
 // @import "rouge-github";
 
 // 主题原来的黑色系高亮样式
-@import "rouge-monokai";
+@import "rouge-{{syntax_highlighter_style}}";
 
 // 单行代码样式
 code{
@@ -34,7 +34,6 @@ pre {
     > code {
         margin: 0;
         padding: 0;
-        color:#222;
         border: none;
         background-color: transparent; /* 多行代码时，清除单行代码的背景 */
         table {

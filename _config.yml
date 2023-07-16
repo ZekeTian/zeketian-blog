@@ -45,8 +45,11 @@ kramdown:
   input: GFM
   syntax_highlighter: rouge
   syntax_highlighter_opts:
+    guess_lang: true # 如果没有指定语言，则猜测语言
     block:
-      line_numbers: true # 添加行号
+      line_numbers: true # 代码块显示行号
+
+syntax_highlighter_style: "github"
 
 # port
 # port: 1234
