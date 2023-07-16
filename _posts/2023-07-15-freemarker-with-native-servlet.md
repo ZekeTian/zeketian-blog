@@ -27,7 +27,7 @@ author: ZekeTian
             设置 ftl 文件的根路径，FreemarkerServlet 会在此根路径下去寻找对应的 ftl 文件。
             如果要访问根路径下的子文件夹的 ftl 文件，那么在 url 中需要加上子文件夹名，
             例如访问 /ftl/test/test.ftl 文件，则 url 为：
-            http://localhost:8080/contextPath/test/test.ftl（即在访问的 url 中添加了 "/test/" 子文件夹名） 
+            http://localhost:8080/contextPath/test/test.ftl （即在访问的 url 中添加了 "/test/" 子文件夹名） 
         -->
         <param-name>TemplatePath</param-name>
         <param-value>/ftl/</param-value>
