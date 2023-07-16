@@ -2,10 +2,10 @@
  * Syntax highlighting styles
  */
 // 导入代码高亮样式
-// @import "rouge-github";
+@import "rouge-github";
 
 // 主题原来的黑色系高亮样式
-@import "rouge-monokai";
+// @import "rouge-monokai";
 
 // 单行代码样式
 code{
