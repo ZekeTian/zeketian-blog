@@ -1,45 +1,8 @@
 /**
  * rouge 代码高亮样式之 github（白色系）
  */
-pre {
-    margin: 12px 0;
-    padding: 8px 12px;
-    //  overflow-x: auto;
-    // 使用下面的样式，代码中的长行会自动换行。当配合代码行号一起显示时，会出现问题。
-    // word-wrap: break-word;      /* IE 5.5-7 */
-    // white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
-    // white-space: pre-wrap;      /* current browsers */
-
-    // 不使用上面的样式，则代码中的长行不会自动换行，但是多余部分的显示会出问题。为了能正常显示多余部分，需要加上下面的属性，从而出现滚动条
-    overflow: auto;
-    > code {
-        margin: 0;
-        padding: 0;
-        color:#222;
-        border: none;
-        background-color: transparent; /* 多行代码时，清除单行代码的背景 */
-        table {
-            background-color: transparent;
-            border: none;
-            margin: 0px;
-            border-collapse: unset;
-            tr {
-                &:nth-of-type(2n+1) {
-                    background-color: transparent;
-                }
-                &:nth-of-type(2n) {
-                    background-color: transparent;
-                }
-            }
-            td {
-                padding: 0;
-            }
-        }
-        .lineno {
-            border-right: 1px solid #ccc;
-        }
-    }
-
+pre > code {
+    color:#222;
 }
 
 .highlight {

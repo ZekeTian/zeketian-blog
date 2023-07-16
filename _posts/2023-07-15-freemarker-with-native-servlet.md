@@ -122,7 +122,7 @@ author: ZekeTian
 
 在不省略作用域对象名时，使用方式是`${作用域对象.属性名}`，Freemarer 在解析这个表达式时，会进入方法 `freemarker.core.Dot#_eval` 去获取作用域对象以及对应的属性值。 `freemarker.core.Dot#_eval`的代码如下：
 
-{% highlight java linenos  mark_lines="2 4" %}
+```java
 TemplateModel _eval(Environment env) throws TemplateException {
     TemplateModel leftModel = target.eval(env);
     if (leftModel instanceof TemplateHashModel) {
@@ -133,7 +133,7 @@ TemplateModel _eval(Environment env) throws TemplateException {
     }
     throw new NonHashException(target, leftModel, env);
 }
-{% endhighlight %}
+```
 
 假设表达式为 `${Request.attrName}`，那么在上述代码中的第 2 行 `TemplateModel leftModel = target.eval(env);` 将会获得 HttpServletRequest 对应的对象（HttpRequestHashModel ）。
 
@@ -149,7 +149,9 @@ public TemplateModel get(String key) throws TemplateModelException {
 
 因为 TemplateHashModel 还可能是 HttpRequestParametersHashModel、HttpSessionHashModel、ServletContextHashModel，所以此处附上这些类的 get 方法实现。
 
-- freemarker.ext.servlet.HttpRequestParametersHashModel#get
+- HttpRequestParametersHashModel
+
+  对应方法 `freemarker.ext.servlet.HttpRequestParametersHashModel#get`
 
   ```java
   public TemplateModel get(String key) {
@@ -158,7 +160,9 @@ public TemplateModel get(String key) throws TemplateModelException {
   }
   ```
 
-- freemarker.ext.servlet.HttpSessionHashModel#get
+- HttpSessionHashModel
+
+  对应方法 `freemarker.ext.servlet.HttpSessionHashModel#get`
 
   ```java
   public TemplateModel get(String key) throws TemplateModelException {
@@ -167,8 +171,10 @@ public TemplateModel get(String key) throws TemplateModelException {
   }
   ```
 
-- freemarker.ext.servlet.ServletContextHashModel#get
+- ServletContextHashModel
 
+  对应方法 `freemarker.ext.servlet.ServletContextHashModel#get`
+  
   ```java
   public TemplateModel get(String key) throws TemplateModelException {
       return wrapper.wrap(servletctx.getAttribute(key));
