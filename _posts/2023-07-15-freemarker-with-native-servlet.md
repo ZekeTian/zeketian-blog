@@ -137,7 +137,7 @@ TemplateModel _eval(Environment env) throws TemplateException {
 
 假设表达式为 `${Request.attrName}`，那么在上述代码中的第 2 行 `TemplateModel leftModel = target.eval(env);` 将会获得 HttpServletRequest 对应的对象（HttpRequestHashModel ）。
 
-然后，在第 4 行  ` return ((TemplateHashModel) leftModel).get(key)`  中，get 方法实际上就是调用  `freemarker.ext.servlet.HttpRequestHashModel#get` 方法。HttpRequestHashModel 的 get 方法代码如下：
+然后，在第 4 行 `return ((TemplateHashModel) leftModel).get(key)` 中，get 方法实际上就是调用  `freemarker.ext.servlet.HttpRequestHashModel#get` 方法。HttpRequestHashModel 的 get 方法代码如下：
 
 ```java
 public TemplateModel get(String key) throws TemplateModelException {
