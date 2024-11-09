@@ -204,7 +204,7 @@ code{
 
 上述涉及的三个 SCSS 文件，详细内容可见笔者的[博客仓库](https://github.com/ZekeTian/zeketian-blog)。另外，笔者再附上一些代码高亮 CSS 样式的资源仓库：
 
-- [jekyll-gitbook](https://github.com/sighingnow/jekyll-gitbook)：该仓库也是一个博客主题仓库，在 [/assets/gitbook/rouge](/assets/gitbook/rouge) 中提供了多个 CSS 样式文件
+- [jekyll-gitbook](https://github.com/sighingnow/jekyll-gitbook)：该仓库也是一个博客主题仓库，在 `/assets/gitbook/rouge` 中提供了多个 CSS 样式文件
 - [pygments-css](https://github.com/richleland/pygments-css)：该仓库提供了 pygments 的 CSS 样式文件（可用于 rouge），而 [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes) 正是 fork 自该仓库
 
 
