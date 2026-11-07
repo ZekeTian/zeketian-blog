@@ -9,7 +9,7 @@ author: ZekeTian
 * content
 {:toc}
 
-Windows 上开着 aTrust，浏览器能打开内网系统，同一时刻 WSL 里却访问不了。本文主要讲解让 WSL 里的发行版自行解析并访问内网域名与业务系统的做法，从而不另起代理、不装转发工具，也不动 Windows 侧的 aTrust 设置。
+Windows 上开着 aTrust，浏览器能打开内网系统，同一时刻 WSL 里却访问不了。本文主要讲解让 WSL 自行解析并访问内网域名与业务系统的做法，从而不另起代理、不装转发工具，也不动 Windows 侧的 aTrust 设置。
 
 两条常见建议“换 mirrored”“装 wsl-vpnkit”都不成立：前者撞上零信任客户端的架构冲突，后者在原生转发上再叠一层，都没回答 DNS 为何在模式选对后还断一层。环境为 WSL 3.0.2/3.0.3、Ubuntu 26.04.1。
 
