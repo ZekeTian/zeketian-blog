@@ -10,7 +10,7 @@ author: ZekeTian
 
 * content
 {:toc}
-我们在使用 Freemarker 时，通常会结合 Spring、SpringBoot 等框架使用，很少会在原生的 Servlet 中直接使用。因此，目前很多文章的内容都是讲解如何借助这些框架去使用 Freemarker，很少有文章讲解如何在原生的 Servlet 中使用 Freemarker。为了加深对 Freemarker 使用方式的理解，本文将介绍原生 Servlet 中的 Freemarker 使用，以及可能会遇到的一些坑。
+Freemarker 通常与 Spring、SpringBoot 等框架结合使用，很少直接用在原生 Servlet 中。因此，现有文章大多讲如何借助框架使用 Freemarker，专门讲原生 Servlet 的很少。为了加深对 Freemarker 使用方式的理解，本文将介绍如何在原生 Servlet 中使用 Freemarker，以及可能会遇到的一些坑。
 
 
 
@@ -56,7 +56,7 @@ author: ZekeTian
 </servlet-mapping>
 ```
 
-上述配置信息是对 FreemarkerServlet 进行配置，而 FreemarkerServlet  是 Freemarker 实现的 Servlet，其可以帮助我们处理 ftl 文件，渲染数据。
+上述配置针对 FreemarkerServlet，它是 Freemarker 自带的 Servlet，负责处理 ftl 文件、渲染数据。
 
 在 FreemarkerServlet 的初始化参数中，重点是对 ftl 文件的路径以及编码格式进行设置，需要注意如下几点：
 
@@ -80,7 +80,7 @@ author: ZekeTian
 
 ### 2.1 ftl 的作用域对象
 
-在 JSP 的 EL 表达式中，其内置了 pageScope、requestScope、sessionScope、applicationScope 四种作用域对象，方便我们获取数据。而在 FreemarkerServet 中，其同样也为我们内置了如下的四种作用域对象：
+JSP 的 EL 表达式内置了 pageScope、requestScope、sessionScope、applicationScope 四种作用域对象，便于获取数据。FreemarkerServlet 也内置了同样的四种：
 
 - Request：对应 HttpServletRequest
 - RequestParameters：对应 HttpServletRequest 中的参数
@@ -114,7 +114,7 @@ author: ZekeTian
 
 #### 2.1.2 底层实现
 
-在了解完基本用法之后，我们再来看看 Freemare 底层是如何实现这两种数据获取方式。
+在了解完基本用法之后，接下来看这两种数据获取方式在 Freemarker 底层如何实现。
 
 
 
@@ -145,7 +145,7 @@ public TemplateModel get(String key) throws TemplateModelException {
 }
 ```
 
-根据上述代码，我们可以知道该方法实际上就是去 HttpServletRequest 中获取 attrName 对应的 attribute 值。
+根据上述代码，该方法实际上就是从 HttpServletRequest 中获取 attrName 对应的 attribute 值。
 
 因为 TemplateHashModel 还可能是 HttpRequestParametersHashModel、HttpSessionHashModel、ServletContextHashModel，所以此处附上这些类的 get 方法实现。
 
@@ -181,7 +181,7 @@ public TemplateModel get(String key) throws TemplateModelException {
   }
   ```
 
-在了解了 Freemarker 的底层代码实现后，我们也可以确定 **FreemarkerServlet 只能帮我们获取 attribute 值，不能获取类的 property 值**，如：不能获取 ServletContext 中的 contextPath （contextPath 是 ServletContext  类的 property 值，而不是 attribute 值）。
+看完底层实现就能确定：**FreemarkerServlet 只能获取 attribute 值，不能获取类的 property 值**。例如获取不到 ServletContext 中的 contextPath——contextPath 是 ServletContext 类的 property 值，不是 attribute 值。
 
 
 
@@ -231,18 +231,18 @@ public TemplateModel get(String key) throws TemplateModelException {
 }
 ```
 
-根据上述代码，我们也清楚了在省略作用域对象名时，Freeamarker 获取 attribute 值的顺序。
+省略作用域对象名时，查找顺序就是上述代码里的几个 Lookup：先模板，再 Request、Session、Application。
 
 
 
 #### 2.1.3 总结
 
-在讲解完 ftl 的作用域对象的基本用法和实现代码之后，我们再根据[官方文档](https://freemarker.apache.org/docs/api/freemarker/ext/servlet/FreemarkerServlet.html) 中 FreemarkerServlet 的介绍进行回顾总结：
+讲完 ftl 作用域对象的基本用法和实现代码，再对照[官方文档](https://freemarker.apache.org/docs/api/freemarker/ext/servlet/FreemarkerServlet.html) 中 FreemarkerServlet 的介绍做一次回顾：
 
 > - It makes all request, request parameters, session, and servlet context attributes available to templates through `Request`, `RequestParameters`, `Session`, and `Application` variables.
 > - The scope variables are also available via automatic scope discovery. That is, writing `Application.attrName`, `Session.attrName`, `Request.attrName` is not mandatory; it's enough to write `attrName`, and if no such variable was created in the template, it will search the variable in `Request`, and then in `Session`, and finally in `Application`.
 
-根据文档中的第一点，也可以看出 FreemarkerServlet 只能帮我们获取 attribute 值，不能获取类的 property 值。
+文档第一点也说明 FreemarkerServlet 只能获取 attribute 值，不能获取类的 property 值。
 
 而文档中的第二点也解释了省略作用域对象名时，获取 attribute 值的顺序。
 
@@ -252,9 +252,9 @@ public TemplateModel get(String key) throws TemplateModelException {
 
 #### 2.2.1 尝试的方案及可能的错误
 
-在开发 html 页面时，通常会使用到 css 等静态文件，而这些静态文件的路径需要获取 contextPath。所以，我们在 ftl 文件中也要想办法获取到 contextPath。
+开发 html 页面时常引用 css 等静态文件，引用路径要带上 contextPath。所以 ftl 文件里也要想办法获取到它。
 
-那么，如何获取呢？首先，我们看看在 JSP 中是如何获取 contextPath。
+如何获取？先看 JSP 中的写法。
 
 JSP 中的获取方式如下：
 
@@ -262,13 +262,13 @@ JSP 中的获取方式如下：
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap/bootstrap.css"/>
 ```
 
-如果，你借鉴上面的写法，尝试在 ftl 文件中通过 Request 对象获取 contextPath。也许，你可能会在 ftl 文件中用如下代码获取。
+照着上面的写法，在 ftl 文件中通过 Request 对象获取 contextPath，大概会写成这样。
 
 ```html
 context path : ${Request.contextPath}
 ```
 
-但是，当实际运行时，你会看到如下的错误信息：
+但实际运行时会看到如下错误：
 
 ```
 	FreeMarker template error:
@@ -282,11 +282,11 @@ context path : ${Request.contextPath}
 
 #### 2.2.2 解决方案
 
-当遇到上面的错误之后，你可能会在网上搜索 “freemarker 如何获取 contextPath”。但是，网上提供的解决方案大多是基于 Spring 框架去实现的，而我们目前的场景是在原生 Servlet 环境中使用 Freemarker。
+遇到上面的错误后，一般会去搜索“freemarker 如何获取 contextPath”。搜到的方案大多基于 Spring 框架实现，而这里的场景是原生 Servlet 环境。
 
-那么在没有 Spring 等其它框架的帮助下，我们如何在 ftl 文件中获取 contextPath 呢？
+没有 Spring 等其它框架的帮助，如何在 ftl 文件中获取 contextPath？
 
-实际上，很简单！我们可以借助 ServletContextListener，在 context 初始化完后，将 contextPath 放进 ServletContext 的 attributes 中。具体代码如下：
+借助 ServletContextListener 即可：context 初始化完成后，将 contextPath 放进 ServletContext 的 attributes 中。具体代码如下：
 
 ```java
 @WebListener
@@ -317,4 +317,4 @@ public class WebContextListener implements ServletContextListener {
 context path : ${Application.contextPath}
 ```
 
-至此，你可以在 Freemarker 中像 JSP 一样轻松地获取到 ContextPath。
+至此，ftl 文件也能像 JSP 那样获取 ContextPath。
