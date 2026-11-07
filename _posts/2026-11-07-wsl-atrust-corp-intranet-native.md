@@ -1,6 +1,6 @@
 ---
 layout: post
-title: WSL 通过 aTrust 访问公司内网：用原生能力，不加转发层
+title: WSL 通过 aTrust 访问内网：用原生能力，不加转发层
 categories: Linux
 tags: WSL aTrust DNS
 author: ZekeTian
@@ -149,7 +149,7 @@ ls -l /etc/resolv.conf
 
 `-f` 会直接覆盖已存在的文件，不用先 `rm`；万一报 `Operation not permitted` 或 `Device or resource busy`，先解掉 `chattr +i` 或挂载再执行。
 
-最后写 `/etc/systemd/resolved.conf`，第一项填公司内网 DNS：
+最后写 `/etc/systemd/resolved.conf`，第一项填内网 DNS：
 
 ```ini
 [Resolve]
@@ -158,7 +158,7 @@ DNS=<内网DNS地址> 223.5.5.5 8.8.8.8
 Domains=~.
 ```
 
-`Domains=~.` 让这个全局 scope 成为所有域名的默认归属，即“什么域名都问我”。内网 DNS 地址从 Windows 侧 aTrust 适配器上取（`ipconfig /all` 里那一行），取不到就找 IT 要。
+`Domains=~.` 让这个全局 scope 成为所有域名的默认归属，即“什么域名都问我”。内网 DNS 地址从 Windows 侧 aTrust 适配器上取（`ipconfig /all` 里那一行），取不到就问网络管理员。
 
 **可选：** 想让“断开期间查过、重连后立刻要通”不留空窗，可以再加一行 `Cache=no-negative`。它**不是必需项**，默认 `yes` 会把 NXDOMAIN 一起缓存，TTL 跟内网 DNS 的 SOA 走；不加也能用，只是重连后要等负缓存过期，或者手动 `sudo resolvectl flush-caches` 清掉。3.4 的 A/B 对照会在断连时查内网域名，不加这行时，验收里“重连后自动恢复”这一条可能要多等一会儿。
 
@@ -250,12 +250,12 @@ getent hosts <内网域名>       # 内网：应失败（无隧道时失败才�
 Consomme 本身就是 WSL 的 socket 级转发（2.2）：Guest 的 `connect()` 已在主机侧由 Windows 进程重新发起。再搭一层，就是在同一段路径上叠第二、第三次转发，换来的三笔账：
 
 - **数据路径多一个责任方。** 转发进程能看到每条连接的目的地址、端口与时间，也能看到未加密协议的内容；TLS 内容它不解密，但元数据照旧可见。
-- **供应链多一个维护方。** 别人的工具或自己写的脚本，版本、补丁、漏洞响应都要自己跟；公司内自维的那套还要额外准入与交接成本。
+- **供应链多一个维护方。** 别人的工具或自己写的脚本，版本、补丁、漏洞响应都要自己跟；自维护的那套还要额外承担审批与交接成本。
 - **审计多一份说明。** 数据面每多一个组件，“谁能看到什么”就要多答一次。
 
 本文的方案没有新增组件：网络模式是 WSL 自带的，DNS 用发行版自带的 systemd-resolved，配置就是 `.wslconfig` 与三个系统文件 —— **责任方与可见面都停在原有组件之内** [推断]，而不是“原生组件没有漏洞”。
 
-**注意：** 若 IT 已统一审批并维护某套转发工具，后两笔账不成立；若 aTrust 把 `wslservice` 判为不可信进程，原生方案同样失效（见 5）。还有一种情况**必须**加一层：内网 DNS 是权威型、不递归，而内外网域名要并存。这时只在发行版内用 dnsmasq 或 unbound 做一次分域 forward（见 3.2），不要放到 Windows 侧，那会把 DNS 推回“主机解析器替 WSL 作答”的老路。
+**注意：** 若转发工具已有统一的审批与维护流程，后两笔账不成立；若 aTrust 把 `wslservice` 判为不可信进程，原生方案同样失效（见 5）。还有一种情况**必须**加一层：内网 DNS 是权威型、不递归，而内外网域名要并存。这时只在发行版内用 dnsmasq 或 unbound 做一次分域 forward（见 3.2），不要放到 Windows 侧，那会把 DNS 推回“主机解析器替 WSL 作答”的老路。
 
 验证一步：确认数据面上没有多余的转发进程。
 
@@ -274,7 +274,7 @@ powershell.exe -NoProfile -c "Get-Process gvproxy,vpnkit,socat -ErrorAction Sile
 |---|---|
 | 短名解析 | `Domains=~.` 不提供搜索域，短名必须显式配搜索域才可用（见 3.1） |
 | 容器 | 容器不继承 resolved，自带 `resolv.conf`；需要 Docker `daemon.json` 的 `dns` 项或直接指向内网解析器，否则“本体通、容器不通” |
-| 进程白名单 | 若 aTrust 把授权收紧到服务进程级（`wslservice`、`wsldevicehost` 不在列表），本方案会与所有“走主机”方案一起失效；此时只能走 IT 审批的 Linux 客户端路线 |
+| 进程白名单 | 若 aTrust 把授权收紧到服务进程级（`wslservice`、`wsldevicehost` 不在列表），本方案会与所有“走主机”方案一起失效；此时只能走 aTrust 的 Linux 客户端路线 |
 | 版本 | 2.x 写 `networkingMode=virtioproxy`、3.x 写 `consomme`，同一后端；3.0.4 以上能拿到 #42026，更新的版本能拿到 #42180，可减少“莫名其妙全灭”的干扰，但**不改变本方案的任何结论**，2.x 也不必为此升级 |
 | 内网 DNS 类型 | 混合上游依赖其具备递归能力，判定方法见 3.2 |
 
@@ -282,7 +282,7 @@ powershell.exe -NoProfile -c "Get-Process gvproxy,vpnkit,socat -ErrorAction Sile
 
 零信任客户端要的是“有身份的发起者”，不是“能路由的包”。判断一个 WSL 网络方案能不能救 aTrust，先看流量由哪个进程发起，再看它是否经过客户端的钩子。“访问不通”常常有两处独立断点，网络模式与 DNS 要分开验、分开修；先分层（归属、数据面、DNS）再动手，比整体换方案省事。
 
-在企业环境里，转发层能不加就不加：原生已有的那一层够用，再叠一层只换来更多责任方。碰到开关看起来正确却无效时，先写出它的**作用域**，再查它和相关修复的合入时间。排查顺序固定为：先问有没有搜索域，再问上游是谁，最后才怀疑 VPN。
+转发层能不加就不加：原生已有的那一层够用，再叠一层只换来更多责任方。碰到开关看起来正确却无效时，先写出它的**作用域**，再查它和相关修复的合入时间。排查顺序固定为：先问有没有搜索域，再问上游是谁，最后才怀疑 VPN。
 
 ## 参考文章
 
