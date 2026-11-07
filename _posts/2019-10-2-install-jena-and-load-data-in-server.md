@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Linux 服务器上 Jena 的安装及简单使用
-category: 图数据库
+categories: 图数据库
 tags: Jena
 author: ZekeTian
 ---
